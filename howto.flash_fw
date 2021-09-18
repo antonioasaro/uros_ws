@@ -1,3 +1,0 @@
-source ./install/local_setup.bash
-ros2 run micro_ros_setup flash_firmware.sh
-
