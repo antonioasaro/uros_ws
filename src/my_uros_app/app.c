@@ -16,6 +16,12 @@
 #include "freertos/task.h"
 #endif
 
+#include "driver/mcpwm.h"
+#include "soc/mcpwm_periph.h"
+#define SERVO_MIN_PULSEWIDTH 700 //Minimum pulse width in microsecond
+#define SERVO_MAX_PULSEWIDTH 2300 //Maximum pulse width in microsecond
+#define SERVO_MAX_DEGREE 90 //Maximum angle in degree upto which servo can rotate
+
 #define LED_GPIO 2
 #define BUTTON_GPIO 22
 #define STRING_BUFFER_LEN 50
@@ -28,8 +34,16 @@ rcl_subscription_t cmd_vel_subscriber;
 
 std_msgs__msg__Header outcoming_button;
 geometry_msgs__msg__Twist cmd_vel;
-int seq_no = 0;
+uint32_t seq_no = 0;
+uint32_t angle = 0;
+uint32_t dir = 1;
 
+static uint32_t servo_per_degree_init(uint32_t degree_of_rotation)
+{
+    uint32_t cal_pulsewidth = 0;
+    cal_pulsewidth = (SERVO_MIN_PULSEWIDTH + (((SERVO_MAX_PULSEWIDTH - SERVO_MIN_PULSEWIDTH) * (degree_of_rotation)) / (SERVO_MAX_DEGREE)));
+    return cal_pulsewidth;
+}
 
 void button_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 {
@@ -56,9 +70,17 @@ void button_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 
 void cmd_vel_subscription_callback(const void * msgin)
 {
+uint32_t pwm_us;
+
 	geometry_msgs__msg__Twist * msg = (geometry_msgs__msg__Twist *) msgin;
-       	printf("Received linear: x==%f y==%f z==%f\n", msg->linear.x, msg->linear.y, msg->linear.z);
-       	printf("Received angular: x==%f y==%f z==%f\n", msg->angular.x, msg->angular.y, msg->angular.z);
+    printf("Received linear: x==%f y==%f z==%f\n", msg->linear.x, msg->linear.y, msg->linear.z);
+    printf("Received angular: x==%f y==%f z==%f\n", msg->angular.x, msg->angular.y, msg->angular.z);
+	if ((angle >= 0) && (angle < SERVO_MAX_DEGREE)) {
+        angle = angle + dir;
+		pwm_us = servo_per_degree_init(angle);
+        mcpwm_set_duty_in_us(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, pwm_us);
+        vTaskDelay(10);
+ 	}
  }
 
 
@@ -76,11 +98,11 @@ void appMain(void *argument)
 
 	// Create a reliable button publisher
 	RCCHECK(rclc_publisher_init_default(&button_publisher, &node,
-		ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Header), "/microROS/button"));
+		ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Header), "/button"));
 
     	// Create a best effort cmd_vel subscriber
 	RCCHECK(rclc_subscription_init_best_effort(&cmd_vel_subscriber, &node,
-        ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist), "/turtle1/cmd_vel"));
+        ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist), "/cmd_vel"));
 
 
 	// Create a 3 seconds button timer timer,
@@ -102,6 +124,16 @@ void appMain(void *argument)
     	gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);
 	gpio_pad_select_gpio(BUTTON_GPIO);
     	gpio_set_direction(BUTTON_GPIO, GPIO_MODE_INPUT);
+
+	// Initializing mcpwm servo control gpio ...
+    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, 18);
+    mcpwm_config_t pwm_config;
+    pwm_config.frequency = 50;
+    pwm_config.cmpr_a = 0;
+    pwm_config.cmpr_b = 0;
+    pwm_config.counter_mode = MCPWM_UP_COUNTER;
+    pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
+    mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);
 
 	while(1) {
 		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
