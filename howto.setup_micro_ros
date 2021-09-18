@@ -1,0 +1,26 @@
+source /opt/ros/$ROS_DISTRO/setup.bash
+
+mkdir uros_ws && cd uros_ws
+
+git clone -b main https://github.com/micro-ROS/micro_ros_setup.git src/micro_ros_setup
+
+rosdep update && rosdep install --from-path src --ignore-src -y
+
+colcon build
+
+source install/local_setup.bash
+
+ros2 run micro_ros_setup create_firmware_ws.sh freertos esp32
+
+ros2 run micro_ros_setup configure_firmware.sh [configuration] [options]
+
+ros2 run micro_ros_setup build_firmware.sh
+
+ros2 run micro_ros_setup flash_firmware.sh
+
+ros2 run micro_ros_setup create_agent_ws.sh
+ros2 run micro_ros_setup build_agent.sh
+source install/local_setup.sh
+ros2 run micro_ros_agent micro_ros_agent [parameters]
+
+
