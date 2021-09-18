@@ -1,0 +1,8 @@
+./build/
+./firmware/
+./install/
+./log/
+./src/ePromisa/
+./src/micro_ros_setup/
+./src/uros/
+

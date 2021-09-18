@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/antonio/projects/uros_vscode/install/micro_ros_msgs/include/**",
+                "/opt/ros/foxy/include/**",
+                "/home/antonio/projects/uros_vscode/src/eProsima/Micro-XRCE-DDS-Agent/include/**",
+                "/home/antonio/projects/uros_vscode/src/uros/micro-ROS-Agent/micro_ros_agent/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "compileCommands": "${workspaceFolder}/firmware/freertos_apps/microros_esp32_extensions/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}

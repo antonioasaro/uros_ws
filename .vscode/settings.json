@@ -1,0 +1,16 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/antonio/projects/uros_vscode/install/micro_ros_msgs/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/antonio/projects/uros_vscode/install/micro_ros_msgs/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "files.associations": {
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
+    },
+    "ros.distro": "foxy"
+}
