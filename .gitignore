@@ -2,6 +2,6 @@ build
 firmware
 install
 log
-src/ePromisa
+src/eProsima
 src/micro_ros_setup
 src/uros
