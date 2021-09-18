@@ -1,2 +1,0 @@
-source ./install/local_setup.sh
-ros2 run micro_ros_agent micro_ros_agent udp4 -p 9999 -v6
