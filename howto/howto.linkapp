@@ -1,0 +1,3 @@
+cd ./firmware/freertos_apps/apps
+ln -s ../../../src/my_uros_app .
+cd -

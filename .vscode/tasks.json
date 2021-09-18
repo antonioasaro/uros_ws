@@ -5,7 +5,7 @@
             "type": "shell",
             "label": "source",
             "command": [
-                "cd ~/projects/uros_vscode/ && . install/setup.bash"
+                "cd ~/projects/uros_ws/ && . install/setup.bash"
             ],
             "problemMatcher": [
                 "$gulp-tsc"
@@ -15,63 +15,63 @@
             "type": "shell",
             "label": "clean",
             "command": [
-                "cd ~/projects/uros_vscode/ && rm -rf build/ install/ log/ firmware/ && unset AMENT_PREFIX_PATH && unset CMAKE_PREFIX_PATH"
+                "cd ~/projects/uros_ws/ && rm -rf build/ install/ log/ firmware/ && unset AMENT_PREFIX_PATH && unset CMAKE_PREFIX_PATH"
             ]
         },
         {
             "type": "shell",
             "label": "colcon_build",
             "command": [
-                "source ~/howto.ros2 && cd ~/projects/uros_vscode/ && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug && . install/setup.bash"
+                "source ~/howto.ros2 && cd ~/projects/uros_ws/ && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug && . install/setup.bash"
             ]
         },
         {
             "type": "shell",
             "label": "create_firmware_ws",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup create_firmware_ws.sh freertos esp32"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup create_firmware_ws.sh freertos esp32"
             ]
         },
         {
             "type": "shell",
             "label": "configure_firmware",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup configure_firmware.sh my_uros_app -t udp -i 192.168.1.177 -p 9999"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup configure_firmware.sh my_uros_app -t udp -i 192.168.1.177 -p 9999"
             ]
         },
         {
             "type": "shell",
             "label": "link_my_uros_app",
             "command": [
-                "cd ~/projects/uros_vscode/firmware/freertos_apps/apps/ && ln -s ../../../src/my_uros_app ."
+                "cd ~/projects/uros_ws/firmware/freertos_apps/apps/ && ln -s ../../../src/my_uros_app ."
             ]
         },
         {
             "type": "shell",
             "label": "menuconfig",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup build_firmware.sh menuconfig"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup build_firmware.sh menuconfig"
             ]
         },
         {
             "type": "shell",
             "label": "build_firmware",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup build_firmware.sh"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup build_firmware.sh"
             ]
         },
         {
             "type": "shell",
             "label": "flash_firmware",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup flash_firmware.sh"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup flash_firmware.sh"
             ]
         },
         {
             "type": "shell",
             "label": "build_agent",
             "command": [
-                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_vscode/ && ros2 run micro_ros_setup create_agent_ws.sh && ros2 run micro_ros_setup build_agent.sh"
+                "source ~/howto.ros2 && source ./install/local_setup.bash && cd ~/projects/uros_ws/ && ros2 run micro_ros_setup create_agent_ws.sh && ros2 run micro_ros_setup build_agent.sh"
             ]
         }
     ]
