@@ -14,7 +14,6 @@
 #define SDA_PIN GPIO_NUM_21
 #define SCL_PIN GPIO_NUM_22
 #define portTICK_PERIOD_MS 10
-
 #define tag "SSD1306"
 
 void i2c_master_init()

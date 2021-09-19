@@ -27,7 +27,8 @@
                 "${workspaceFolder}/firmware/toolchain/esp-idf/components/heap/include",
                 "${workspaceFolder}/firmware/toolchain/esp-idf/components/driver/include/driver",
                 "${workspaceFolder}/firmware/toolchain/esp-idf/components/esp_ringbuf/include",
-                "${workspaceFolder}/firmware/toolchain/esp-idf/components/soc/include"
+                "${workspaceFolder}/firmware/toolchain/esp-idf/components/soc/include",
+                "${workspaceFolder}/src/my_uros_app/**"
             ],
             "name": "ROS",
             "compileCommands": "${workspaceFolder}/firmware/freertos_apps/microros_esp32_extensions/build/compile_commands.json"

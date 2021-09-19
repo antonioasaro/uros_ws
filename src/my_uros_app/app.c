@@ -22,7 +22,8 @@
 #define SERVO_MAX_PULSEWIDTH 2300 //Maximum pulse width in microsecond
 #define SERVO_MAX_DEGREE 90 //Maximum angle in degree upto which servo can rotate
 
-#include "oled.h"
+//// #include "oled_main.h"
+#include "mpu6050_main.h"
 
 #define LED_GPIO 2
 #define BUTTON_GPIO 35
@@ -138,7 +139,8 @@ void appMain(void *argument)
     pwm_config.duty_mode = MCPWM_DUTY_MODE_0;
     mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_config);
 
-	oled_main();
+	//// oled_main();
+	xTaskCreate(&task_mpu6050, "mpu6050",  2048, NULL, 6, NULL);
 
 	while(1) {
 		rclc_executor_spin_some(&executor, RCL_MS_TO_NS(10));
