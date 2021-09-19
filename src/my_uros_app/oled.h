@@ -13,7 +13,7 @@
 
 #define SDA_PIN GPIO_NUM_21
 #define SCL_PIN GPIO_NUM_22
-#define portTICK_PERIOD_MS 1
+#define portTICK_PERIOD_MS 10
 
 #define tag "SSD1306"
 
@@ -80,9 +80,11 @@ void task_ssd1306_display_pattern(void *ignore) {
 }
 
 void task_ssd1306_display_clear(void *ignore) {
+	
 	i2c_cmd_handle_t cmd;
 
 	uint8_t zero[128];
+	for (int i = 0; i < 128; i++) { zero[i] = 0; }
 	for (uint8_t i = 0; i < 8; i++) {
 		cmd = i2c_cmd_link_create();
 		i2c_master_start(cmd);
@@ -219,9 +221,9 @@ void oled_main(void)
 
 	//xTaskCreate(&task_ssd1306_display_pattern, "ssd1306_display_pattern",  2048, NULL, 6, NULL);
 	xTaskCreate(&task_ssd1306_display_clear, "ssd1306_display_clear",  2048, NULL, 6, NULL);
-	vTaskDelay(100/portTICK_PERIOD_MS);
+	vTaskDelay(500/portTICK_PERIOD_MS);
 	xTaskCreate(&task_ssd1306_display_text, "ssd1306_display_text",  2048,
-		(void *)"Hello world!\nMulitine is OK!\nAnother line", 6, NULL);
+		(void *)"Hello world!    \nMulitine is OK! \nAnother line    ", 6, NULL);
 ////	xTaskCreate(&task_ssd1306_contrast, "ssid1306_contrast", 2048, NULL, 6, NULL);
 ////	xTaskCreate(&task_ssd1306_scroll, "ssid1306_scroll", 2048, NULL, 6, NULL);
 }
