@@ -14,7 +14,7 @@
 #define SDA_PIN GPIO_NUM_21
 #define SCL_PIN GPIO_NUM_22
 #define portTICK_PERIOD_MS 10
-#define tag "SSD1306"
+#define tag_oled "SSD1306"
 
 void i2c_master_init()
 {
@@ -50,9 +50,9 @@ void ssd1306_init() {
 
 	espRc = i2c_master_cmd_begin(I2C_NUM_0, cmd, 10/portTICK_PERIOD_MS);
 	if (espRc == ESP_OK) {
-		ESP_LOGI(tag, "OLED configured successfully");
+		ESP_LOGI(tag_oled, "OLED configured successfully");
 	} else {
-		ESP_LOGE(tag, "OLED configuration failed. code: 0x%.2X", espRc);
+		ESP_LOGE(tag_oled, "OLED configuration failed. code: 0x%.2X", espRc);
 	}
 	i2c_cmd_link_delete(cmd);
 }
@@ -151,9 +151,9 @@ void task_ssd1306_scroll(void *ignore) {
 	i2c_master_stop(cmd);
 	espRc = i2c_master_cmd_begin(I2C_NUM_0, cmd, 10/portTICK_PERIOD_MS);
 	if (espRc == ESP_OK) {
-		ESP_LOGI(tag, "Scroll command succeeded");
+		ESP_LOGI(tag_oled, "Scroll command succeeded");
 	} else {
-		ESP_LOGE(tag, "Scroll command failed. code: 0x%.2X", espRc);
+		ESP_LOGE(tag_oled, "Scroll command failed. code: 0x%.2X", espRc);
 	}
 
 	i2c_cmd_link_delete(cmd);
@@ -182,6 +182,7 @@ void task_ssd1306_display_text(const void *arg_text) {
 	i2c_master_cmd_begin(I2C_NUM_0, cmd, 10/portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 
+	printf("task_ssd1306_display_text()\n");
 	for (uint8_t i = 0; i < text_len; i++) {
 		if (text[i] == '\n') {
 			cmd = i2c_cmd_link_create();
@@ -218,11 +219,13 @@ void oled_main(void)
 	i2c_master_init();
 	ssd1306_init();
 
+/*
 	//xTaskCreate(&task_ssd1306_display_pattern, "ssd1306_display_pattern",  2048, NULL, 6, NULL);
 	xTaskCreate(&task_ssd1306_display_clear, "ssd1306_display_clear",  2048, NULL, 6, NULL);
 	vTaskDelay(500/portTICK_PERIOD_MS);
-	xTaskCreate(&task_ssd1306_display_text, "ssd1306_display_text",  2048,
+	xTaskCreate((TaskFunction_t) &task_ssd1306_display_text, "ssd1306_display_text",  2048,
 		(void *)"Hello world!    \nMulitine is OK! \nAnother line    ", 6, NULL);
-////	xTaskCreate(&task_ssd1306_contrast, "ssid1306_contrast", 2048, NULL, 6, NULL);
-////	xTaskCreate(&task_ssd1306_scroll, "ssid1306_scroll", 2048, NULL, 6, NULL);
+	xTaskCreate(&task_ssd1306_contrast, "ssid1306_contrast", 2048, NULL, 6, NULL);
+	xTaskCreate(&task_ssd1306_scroll, "ssid1306_scroll", 2048, NULL, 6, NULL);
+*/
 }
